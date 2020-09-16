@@ -1,78 +1,34 @@
 package com.demo.shaadi.model
 
 data class Result(
-    val cell: String = "",
-    val dob: Dob? = Dob(),
-    val email: String = "",
-    val gender: String = "",
-    val id: Id? = Id(),
-    val location: Location? = Location(),
-    val login: Login? = Login(),
-    val name: Name? = Name(),
-    val nat: String = "",
-    val phone: String = "",
-    val picture: Picture? = Picture(),
-    val registered: Registered? = Registered()
+    var cell: String = "",
+    var dob: Dob? = Dob(),
+    var email: String = "",
+    var gender: String = "",
+    var location: Location? = Location(),
+    var name: Name? = Name(),
+    var phone: String = "",
+    var picture: Picture? = Picture()
 ) {
     data class Dob(
-        val age: Int = 0,
-        val date: String = ""
-    )
-
-    data class Id(
-        val name: String = "",
-        val value: String = ""
+        var age: String = "",
+        var date: String = ""
     )
 
     data class Location(
-        val city: String = "",
-        val coordinates: Coordinates? = Coordinates(),
-        val country: String = "",
-        val postcode: Int = 0,
-        val state: String = "",
-        val street: Street? = Street(),
-        val timezone: Timezone? = Timezone()
-    ) {
-        data class Coordinates(
-            val latitude: String = "",
-            val longitude: String = ""
-        )
-
-        data class Street(
-            val name: String = "",
-            val number: Int = 0
-        )
-
-        data class Timezone(
-            val description: String = "",
-            val offset: String = ""
-        )
-    }
-
-    data class Login(
-        val md5: String = "",
-        val password: String = "",
-        val salt: String = "",
-        val sha1: String = "",
-        val sha256: String = "",
-        val username: String = "",
-        val uuid: String = ""
+        var city: String = "",
+        var country: String = "",
+        var postcode: String = "",
+        var state: String = "",
     )
-
     data class Name(
-        val first: String = "",
-        val last: String = "",
-        val title: String = ""
+        var first: String = "",
+        var last: String = "",
+        var title: String = ""
     )
 
     data class Picture(
-        val large: String = "",
-        val medium: String = "",
-        val thumbnail: String = ""
+        var large: String = ""
     )
 
-    data class Registered(
-        val age: Int = 0,
-        val date: String = ""
-    )
 }

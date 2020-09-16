@@ -2,6 +2,7 @@ package com.demo.shaadi.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.shaadi.R
 import com.demo.shaadi.adapter.UserAdapter
@@ -17,7 +18,16 @@ class UserListFragment : Fragment(R.layout.fragment_users_list) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = (activity as HomeActivity).userViewModel
+
+        observeLiveData()
         setUpRecyclerView()
+
+    }
+
+    private fun observeLiveData() {
+        viewModel.getPosts().observe(viewLifecycleOwner, Observer {
+            userAdapter.submitList(it)
+        })
     }
 
     private fun setUpRecyclerView() {
@@ -25,6 +35,7 @@ class UserListFragment : Fragment(R.layout.fragment_users_list) {
         rvUserList.apply {
             adapter = userAdapter
             layoutManager = LinearLayoutManager(activity)
+            setHasFixedSize(true)
         }
     }
 }

@@ -13,6 +13,8 @@ import com.demo.shaadi.model.UserInfo
 
 abstract class AppDatabase : RoomDatabase(){
 
+    abstract fun userDao(): UserDao
+
     companion object {
         @Volatile private var instance: AppDatabase? = null
         private val LOCK = Any()
