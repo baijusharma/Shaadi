@@ -16,4 +16,5 @@ data class UserInfo(
     var age: String = "",
     var image: String = "",
     var email: String = "",
+    var userState: Int = 0,
 )

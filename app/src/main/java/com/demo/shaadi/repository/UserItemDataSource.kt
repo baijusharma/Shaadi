@@ -7,6 +7,8 @@ import com.demo.shaadi.api.UsersAPICall
 import com.demo.shaadi.dao.AppDatabase
 import com.demo.shaadi.model.Result
 import com.demo.shaadi.model.UserInfo
+import com.demo.shaadi.utils.Constants.Companion.FIRST_PAGE
+import com.demo.shaadi.utils.Constants.Companion.PAGE_SIZE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -20,10 +22,6 @@ class UserItemDataSource(coroutineContext: CoroutineContext) :
     private val job = Job()
     private val scope = CoroutineScope(coroutineContext + job)
 
-    companion object {
-        const val FIRST_PAGE = 1
-        const val PAGE_SIZE = 20
-    }
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,

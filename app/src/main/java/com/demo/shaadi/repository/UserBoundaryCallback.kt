@@ -4,18 +4,13 @@ import android.util.Log
 import androidx.paging.PagedList
 import com.demo.shaadi.api.RetrofitInstance
 import com.demo.shaadi.api.UsersAPICall
-import com.demo.shaadi.dao.AppDatabase
-import com.demo.shaadi.model.Result
 import com.demo.shaadi.model.UserInfo
-import com.demo.shaadi.repository.UserItemDataSource.Companion.FIRST_PAGE
-import com.demo.shaadi.repository.UserItemDataSource.Companion.PAGE_SIZE
+import com.demo.shaadi.utils.Constants.Companion.FIRST_PAGE
+import com.demo.shaadi.utils.Constants.Companion.PAGE_SIZE
 import com.demo.shaadi.utils.PagingRequestHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
@@ -24,7 +19,6 @@ class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: 
 
     private val job = Job()
     private val scope = CoroutineScope(coroutineContext + job)
-
     private val executor = Executors.newSingleThreadExecutor()
     private val helper = PagingRequestHelper(executor)
     private val apiService = RetrofitInstance.getClient().create(UsersAPICall::class.java)
@@ -40,11 +34,11 @@ class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: 
                     val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE)
                     when {
                         response.isSuccessful -> {
-                            val listing = response.body()?.userData
-                            val userList = ArrayList<UserInfo>()
-                            if(listing!= null){
+                            val responseList = response.body()?.userData
+                            val userList = mutableListOf<UserInfo>()
+                            if (responseList != null) {
 
-                                for (user in listing){
+                                for (user in responseList) {
                                     val userInfo = UserInfo()
                                     userInfo.image = user.picture!!.large
                                     userInfo.title = user.name!!.title
@@ -78,14 +72,14 @@ class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: 
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) { helperCallback ->
             scope.launch {
                 try {
-                    val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE+1)
+                    val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE)
                     when {
                         response.isSuccessful -> {
                             val listing = response.body()?.userData
-                            val userList = ArrayList<UserInfo>()
-                            if(listing!= null){
+                            val userList = mutableListOf<UserInfo>()
+                            if (listing != null) {
 
-                                for (user in listing){
+                                for (user in listing) {
                                     val userInfo = UserInfo()
                                     userInfo.image = user.picture!!.large
                                     userInfo.title = user.name!!.title

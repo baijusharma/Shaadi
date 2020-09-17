@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.demo.shaadi.R
-import com.demo.shaadi.model.Result
 import com.demo.shaadi.model.UserInfo
 import kotlinx.android.synthetic.main.item_user_data.view.*
 
@@ -22,6 +21,7 @@ class UserAdapter :
         )
     }
 
+
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val userInfo = getItem(position)
         holder.itemView.apply {
@@ -34,23 +34,55 @@ class UserAdapter :
                 tvGender.text = userInfo.gender
                 tvAge.text = userInfo.age
             }
+            if (userInfo!!.userState == 1) {
+                btn_accept.visibility = View.INVISIBLE
+                text_accept.visibility = View.VISIBLE
+                btn_decline.visibility = View.VISIBLE
+                text_decline.visibility = View.INVISIBLE
+            } else if (userInfo.userState == -1) {
+                btn_decline.visibility = View.INVISIBLE
+                text_decline.visibility = View.VISIBLE
+                btn_accept.visibility = View.VISIBLE
+                text_accept.visibility = View.INVISIBLE
+            } else {
+                btn_accept.visibility = View.VISIBLE
+                btn_decline.visibility = View.VISIBLE
+                text_accept.visibility = View.INVISIBLE
+                text_decline.visibility = View.INVISIBLE
+            }
+            btn_accept.setOnClickListener {
+                userInfo.userState = 1
+                onItemClickListener?.let { it(userInfo) }
+            }
+            btn_decline.setOnClickListener {
+                userInfo.userState = -1
+                onItemClickListener?.let { it(userInfo) }
+            }
         }
 
     }
 
-companion object {
-    private val differCallBack = object : DiffUtil.ItemCallback<UserInfo>() {
+    private var onItemClickListener: ((UserInfo) -> Unit)? = null
 
-        override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
-            return oldItem.email == newItem.email
-        }
+    fun setOnItemClickListener(listener: (UserInfo) -> Unit) {
+        onItemClickListener = listener
+    }
 
-        override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
-            return oldItem == newItem
+    companion object {
+        private val differCallBack = object : DiffUtil.ItemCallback<UserInfo>() {
+
+            override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+                return oldItem.email == newItem.email
+
+            }
+
+            override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+                return oldItem.firstName.equals(newItem.firstName) && oldItem.email.equals(newItem.email) && oldItem.userState.equals(newItem.userState)
+            }
         }
     }
-}
 
-inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 }
