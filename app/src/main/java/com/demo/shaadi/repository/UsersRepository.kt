@@ -5,10 +5,12 @@ import com.demo.shaadi.model.UserInfo
 
 class UsersRepository(val db: AppDatabase) {
 
+    // Insert user data in DB
      suspend fun insert(userList: MutableList<UserInfo>) {
          db.userDao().insert(userList)
      }
 
+    // Get data stored in DB
     fun posts() = db.userDao().posts()
 
     suspend fun updateUserState(email: String, userState: Int){

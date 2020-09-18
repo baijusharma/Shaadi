@@ -1,7 +1,8 @@
 package com.demo.shaadi.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -9,10 +10,11 @@ import com.demo.shaadi.model.UserInfo
 import com.demo.shaadi.repository.UserBoundaryCallback
 import com.demo.shaadi.repository.UsersRepository
 import com.demo.shaadi.utils.Constants.Companion.PAGE_SIZE
+import com.demo.shaadi.utils.UserApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UserViewModel(val usersRepository: UsersRepository) : ViewModel() {
+class UserViewModel( app: Application,private val usersRepository: UsersRepository) : AndroidViewModel(app) {
 
     private var usersLiveData: LiveData<PagedList<UserInfo>>
 
@@ -36,13 +38,14 @@ class UserViewModel(val usersRepository: UsersRepository) : ViewModel() {
         livePageListBuilder.setBoundaryCallback(
             UserBoundaryCallback(
                 Dispatchers.IO,
-                usersRepository
+                usersRepository,
+                getApplication<UserApplication>().applicationContext
             )
         )
         return livePageListBuilder
 
     }
-
+    // Updated user state in DB
     fun updateUserState(email: String, userState: Int) = viewModelScope.launch {
         usersRepository.updateUserState(email,userState)
     }

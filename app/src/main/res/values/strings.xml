@@ -11,4 +11,6 @@
     <string name="decline">Decline</string>
     <string name="you_decline">You Declined</string>
     <string name="you_accept">You Accepted</string>
+    <string name="no_internet">Make sure you have a working internet connection.</string>
+    <string name="no_data">No Profile Data Available.\n Please connect to internet.</string>
 </resources>

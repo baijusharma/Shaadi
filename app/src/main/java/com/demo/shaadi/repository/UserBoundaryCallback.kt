@@ -1,5 +1,6 @@
 package com.demo.shaadi.repository
 
+import android.content.Context
 import android.util.Log
 import androidx.paging.PagedList
 import com.demo.shaadi.api.RetrofitInstance
@@ -14,7 +15,11 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
-class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: UsersRepository) :
+class UserBoundaryCallback(
+    coroutineContext: CoroutineContext,
+    usersRepository: UsersRepository,
+    context: Context,
+) :
     PagedList.BoundaryCallback<UserInfo>() {
 
     private val job = Job()
@@ -23,11 +28,10 @@ class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: 
     private val helper = PagingRequestHelper(executor)
     private val apiService = RetrofitInstance.getClient().create(UsersAPICall::class.java)
     private val mUsersRepository = usersRepository
-
+    private val mConText = context
 
     override fun onZeroItemsLoaded() {
         super.onZeroItemsLoaded()
-        //1
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) { helperCallback ->
             scope.launch {
                 try {
@@ -57,7 +61,6 @@ class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: 
                             }
                         }
                     }
-
                 } catch (exception: Exception) {
                     Log.e("UserItemDataSource", "Failed to fetch data!")
                 }
@@ -97,7 +100,6 @@ class UserBoundaryCallback(coroutineContext: CoroutineContext, usersRepository: 
                             }
                         }
                     }
-
                 } catch (exception: Exception) {
                     Log.e("UserItemDataSource", "Failed to fetch data!")
                 }

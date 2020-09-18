@@ -21,12 +21,11 @@ class UserAdapter :
         )
     }
 
-
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val userInfo = getItem(position)
         holder.itemView.apply {
             userInfo?.let {
-                Glide.with(this).load(userInfo.image).into(ivUserImage)
+                Glide.with(this).load(userInfo.image).placeholder(R.drawable.place_holder).into(ivUserImage)
                 tvTitle.text = userInfo.title
                 tvName.text = userInfo.firstName + " " + userInfo.lastName
                 tvCity.text = userInfo.city
@@ -77,7 +76,11 @@ class UserAdapter :
             }
 
             override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
-                return oldItem.firstName.equals(newItem.firstName) && oldItem.email.equals(newItem.email) && oldItem.userState.equals(newItem.userState)
+                return oldItem.firstName.equals(newItem.firstName) && oldItem.email.equals(newItem.email)
+                        && oldItem.userState.equals(newItem.userState) && oldItem.gender.equals(newItem.gender)
+                        && oldItem.city.equals(newItem.city)   && oldItem.title.equals(newItem.title)
+                        && oldItem.lastName.equals(newItem.lastName) && oldItem.country.equals(newItem.country)
+                        && oldItem.age.equals(newItem.age)
             }
         }
     }
