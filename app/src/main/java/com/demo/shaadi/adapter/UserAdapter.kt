@@ -84,8 +84,7 @@ class UserAdapter :
             }
         }
     }
-
-
+    
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 }

@@ -1,6 +1,5 @@
 package com.demo.shaadi.repository
 
-import android.content.Context
 import android.util.Log
 import androidx.paging.PagedList
 import com.demo.shaadi.api.RetrofitInstance
@@ -15,10 +14,14 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
+
+/**
+ * BoundaryCallback signals when you should load new data.
+ * It lets you know when it has no data and when the item at the end of its available data has been loaded.
+ */
 class UserBoundaryCallback(
     coroutineContext: CoroutineContext,
-    usersRepository: UsersRepository,
-    context: Context,
+    usersRepository: UsersRepository
 ) :
     PagedList.BoundaryCallback<UserInfo>() {
 
@@ -28,14 +31,16 @@ class UserBoundaryCallback(
     private val helper = PagingRequestHelper(executor)
     private val apiService = RetrofitInstance.getClient().create(UsersAPICall::class.java)
     private val mUsersRepository = usersRepository
-    private val mConText = context
 
+    /**
+     * INITIAL download with the help of PagingRequestHelper class
+     */
     override fun onZeroItemsLoaded() {
         super.onZeroItemsLoaded()
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) { helperCallback ->
             scope.launch {
                 try {
-                    val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE)
+                    val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE) // API call to get items list
                     when {
                         response.isSuccessful -> {
                             val responseList = response.body()?.userData
@@ -55,7 +60,7 @@ class UserBoundaryCallback(
                                     userInfo.country = user.location!!.country
                                     userList.add(userInfo)
                                 }
-                                mUsersRepository.insert(userList)
+                                mUsersRepository.insert(userList) // Insert users in DB
                                 helperCallback?.recordSuccess()
 
                             }
@@ -70,12 +75,15 @@ class UserBoundaryCallback(
 
     }
 
+    /**
+     * Here I make AFTER request type to the helper to load next data
+     */
     override fun onItemAtEndLoaded(itemAtEnd: UserInfo) {
         super.onItemAtEndLoaded(itemAtEnd)
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) { helperCallback ->
             scope.launch {
                 try {
-                    val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE)
+                    val response = apiService.getUsersList(PAGE_SIZE, FIRST_PAGE)// API call to get items list
                     when {
                         response.isSuccessful -> {
                             val listing = response.body()?.userData
@@ -95,7 +103,7 @@ class UserBoundaryCallback(
                                     userInfo.country = user.location!!.country
                                     userList.add(userInfo)
                                 }
-                                mUsersRepository.insert(userList)
+                                mUsersRepository.insert(userList) // Insert users in DB
                                 helperCallback?.recordSuccess()
                             }
                         }

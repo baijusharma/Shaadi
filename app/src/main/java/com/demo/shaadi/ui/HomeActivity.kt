@@ -17,7 +17,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         val repository = UsersRepository(AppDatabase(this))
-        val viewModelProviderFactory = UserViewModelProviderFactory(application,repository)
+        val viewModelProviderFactory = UserViewModelProviderFactory(repository)
         userViewModel = ViewModelProvider(this, viewModelProviderFactory).get(UserViewModel::class.java)
     }
 }

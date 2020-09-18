@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.shaadi.R
@@ -19,6 +18,9 @@ class UserListFragment : MyBaseFragment() {
     private lateinit var viewModel: UserViewModel
     private lateinit var userAdapter: UserAdapter
 
+    /**
+     * This will be trigger when network state change.
+     */
     override fun onNetworkChange(isConnected: Boolean) {
         val isDataExist = mPreferenceUtils.getValue(IS_DATA_SET, false)
         if (isConnected || isDataExist) {
@@ -51,6 +53,9 @@ class UserListFragment : MyBaseFragment() {
         }
     }
 
+    /**
+     * This fun will observe users live data which are returned from viewModel
+     */
     private fun observeLiveData() {
         viewModel.getPosts().observe(viewLifecycleOwner, Observer { userList ->
             if (userList.size > 0) {
@@ -63,6 +68,9 @@ class UserListFragment : MyBaseFragment() {
         })
     }
 
+    /**
+     * Set up RecyclerView for viewing the list
+     */
     private fun setUpRecyclerView() {
         userAdapter = UserAdapter()
         rvUserList.apply {
