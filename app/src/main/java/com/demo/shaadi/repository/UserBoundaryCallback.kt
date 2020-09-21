@@ -8,9 +8,7 @@ import com.demo.shaadi.model.UserInfo
 import com.demo.shaadi.utils.Constants.Companion.FIRST_PAGE
 import com.demo.shaadi.utils.Constants.Companion.PAGE_SIZE
 import com.demo.shaadi.utils.PagingRequestHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
